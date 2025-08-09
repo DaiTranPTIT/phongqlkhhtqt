@@ -28,9 +28,6 @@ export default function NewsPage() {
         {/* Advanced Filters & Controls */}
         <section className="mb-8">
           <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 max-w-3xl mx-auto p-3">
-            <h2 className="text-lg font-semibold text-white mb-3">
-              Advanced Filters & Controls
-            </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1">

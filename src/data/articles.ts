@@ -294,11 +294,14 @@ const getConsistentRandom = (
 
 // Transform base articles for different contexts
 export const getSavedArticles = (): SavedArticle[] => {
+  // Use fixed base date to avoid hydration issues
+  const baseDate = new Date("2024-12-01T10:00:00Z");
+
   return baseArticles.slice(0, 6).map((article, index) => ({
     ...article,
     id: generateArticleId(article.name),
     savedAt: new Date(
-      Date.now() - (index + 1) * 24 * 60 * 60 * 1000
+      baseDate.getTime() - (index + 1) * 24 * 60 * 60 * 1000
     ).toISOString(),
     readTime: `${getConsistentRandom(article.name, 3, 12)} min read`,
     category: article.field,
@@ -307,13 +310,16 @@ export const getSavedArticles = (): SavedArticle[] => {
 };
 
 export const getFavoriteArticles = (): FavoriteArticle[] => {
+  // Use fixed base date to avoid hydration issues
+  const baseDate = new Date("2024-12-01T12:00:00Z");
+
   return baseArticles.slice(1, 7).map((article, index) => ({
     ...article,
     id: generateArticleId(article.name),
     likes: getConsistentRandom(article.name, 500, 2000),
     imageUrl: `https://picsum.photos/400/250?random=${10 + index}`,
     crawledAt: new Date(
-      Date.now() - (index + 1) * 48 * 60 * 60 * 1000
+      baseDate.getTime() - (index + 1) * 48 * 60 * 60 * 1000
     ).toISOString(),
     rating: 4.5 + getConsistentRandom(article.name, 0, 5) / 10,
     readTime: `${getConsistentRandom(article.name, 5, 15)} min read`,
@@ -323,13 +329,16 @@ export const getFavoriteArticles = (): FavoriteArticle[] => {
 
 // Get all favorite articles for the full favorites page with pagination
 export const getAllFavoriteArticles = (): FavoriteArticle[] => {
+  // Use fixed base date to avoid hydration issues
+  const baseDate = new Date("2024-12-01T14:00:00Z");
+
   return baseArticles.slice(0, 12).map((article, index) => ({
     ...article,
     id: generateArticleId(article.name),
     likes: getConsistentRandom(article.name, 500, 2000),
     imageUrl: `https://picsum.photos/400/250?random=${20 + index}`,
     crawledAt: new Date(
-      Date.now() - (index + 1) * 12 * 60 * 60 * 1000
+      baseDate.getTime() - (index + 1) * 12 * 60 * 60 * 1000
     ).toISOString(),
     rating: 4.0 + getConsistentRandom(article.name, 0, 10) / 10,
     readTime: `${getConsistentRandom(article.name, 5, 15)} min read`,
@@ -350,6 +359,9 @@ export const getTrendingArticles = (): TrendingArticle[] => {
 };
 
 export const getNewsGridItems = (): NewsGridItem[] => {
+  // Use fixed base date to avoid hydration issues
+  const baseDate = new Date("2024-12-01T16:00:00Z");
+
   return baseArticles.map((article, index) => ({
     ...article,
     id: generateArticleId(article.name),
@@ -360,7 +372,7 @@ export const getNewsGridItems = (): NewsGridItem[] => {
     isLiked: index % 3 === 0,
     isSaved: index % 4 === 0,
     publishedAt: new Date(
-      Date.now() - (index + 1) * 12 * 60 * 60 * 1000
+      baseDate.getTime() - (index + 1) * 12 * 60 * 60 * 1000
     ).toISOString(),
   }));
 };

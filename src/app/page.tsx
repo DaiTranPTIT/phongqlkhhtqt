@@ -9,8 +9,6 @@ export default function Home() {
     <main className="min-h-screen">
       <Hero />
       <div className="container mx-auto px-4 py-8">
-        <CategoryFilter />
-
         {/* Main 2/3 1/3 Layout */}
         <MainContent />
 
