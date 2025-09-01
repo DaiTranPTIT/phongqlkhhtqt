@@ -1,125 +1,81 @@
-import { Github, Twitter, Linkedin, Mail, Heart } from "lucide-react";
+import { Github, Twitter, Linkedin, Mail } from "lucide-react";
 
 export default function Footer() {
   // Sử dụng giá trị cố định để tránh hydration mismatch
   const currentYear = 2025;
 
-  const footerLinks = {
-    company: [
-      { name: "About Us", href: "#" },
-      { name: "Careers", href: "#" },
-      { name: "Contact", href: "#" },
-      { name: "Privacy Policy", href: "#" },
-    ],
-    categories: [
-      { name: "Artificial Intelligence", href: "#" },
-      { name: "Blockchain", href: "#" },
-      { name: "Mobile Technology", href: "#" },
-      { name: "Web Development", href: "#" },
-    ],
-    resources: [
-      { name: "Newsletter", href: "#" },
-      { name: "RSS Feed", href: "#" },
-      { name: "API", href: "#" },
-      { name: "Developer Tools", href: "#" },
-    ],
-  };
-
   const socialLinks = [
-    { icon: Twitter, href: "#", label: "Twitter" },
-    { icon: Github, href: "#", label: "GitHub" },
-    { icon: Linkedin, href: "#", label: "LinkedIn" },
     { icon: Mail, href: "#", label: "Email" },
+    { icon: Github, href: "https://github.com/technews", label: "Github" },
+    { icon: Twitter, href: "https://twitter.com/technews", label: "Twitter" },
+    {
+      icon: Linkedin,
+      href: "https://linkedin.com/company/technews",
+      label: "LinkedIn",
+    },
   ];
 
   return (
-    <footer className="bg-slate-900 border-t border-slate-800">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {/* Brand Section */}
-          <div className="lg:col-span-1">
-            <h3 className="text-2xl font-bold gradient-text mb-4">TechNews</h3>
-            <p className="text-slate-400 mb-6">
-              Your trusted source for the latest technology news, insights, and
-              analysis. Stay informed about the innovations shaping our future.
-            </p>
-            <div className="flex space-x-4">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.label}
-                  href={social.href}
-                  className="text-slate-400 hover:text-orange-400 transition-colors"
-                  aria-label={social.label}
-                >
-                  <social.icon className="w-5 h-5" />
-                </a>
-              ))}
+    <footer className="bg-gradient-to-b from-slate-900 to-slate-950 border-t border-slate-800/40">
+      <div className="container mx-auto px-4">
+        {/* Top Wave SVG */}
+        <div className="relative h-8 overflow-hidden -mt-8">
+          <svg
+            className="absolute bottom-0 w-full h-16 text-slate-900"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+              fill="currentColor"
+            ></path>
+          </svg>
+        </div>
+
+        {/* Main Footer Content */}
+        <div className="py-12">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            {/* Brand Section */}
+            <div className="mb-8 md:mb-0 text-center md:text-left md:w-1/2">
+              <h3 className="text-3xl font-bold mb-4">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-amber-500">
+                  TechNews
+                </span>
+              </h3>
+              <p className="text-slate-400 max-w-md">
+                Cập nhật tin tức công nghệ mới nhất từ các nguồn uy tín nhất
+              </p>
             </div>
-          </div>
 
-          {/* Company Links */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Company</h4>
-            <ul className="space-y-2">
-              {footerLinks.company.map((link) => (
-                <li key={link.name}>
+            {/* Contact Links */}
+            <div className="md:w-1/2 mb-8 md:mb-0">
+              <h4 className="text-white font-semibold mb-4 text-center">
+                Kết nối với chúng tôi
+              </h4>
+              <div className="flex justify-center gap-4">
+                {socialLinks.map((social) => (
                   <a
-                    href={link.href}
-                    className="text-slate-400 hover:text-orange-400 transition-colors"
+                    key={social.label}
+                    href={social.href}
+                    className="flex items-center justify-center p-3 rounded-full bg-slate-800 hover:bg-orange-500 text-white transition-all transform hover:scale-110 hover:-translate-y-1 shadow-lg"
+                    aria-label={social.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
-                    {link.name}
+                    <social.icon className="w-5 h-5" />
                   </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Categories</h4>
-            <ul className="space-y-2">
-              {footerLinks.categories.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-slate-400 hover:text-orange-400 transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <h4 className="text-white font-semibold mb-4">Resources</h4>
-            <ul className="space-y-2">
-              {footerLinks.resources.map((link) => (
-                <li key={link.name}>
-                  <a
-                    href={link.href}
-                    className="text-slate-400 hover:text-orange-400 transition-colors"
-                  >
-                    {link.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-slate-800 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-slate-400 text-sm mb-4 md:mb-0">
+        {/* Footer Bottom */}
+        <div className="border-t border-slate-800/50 py-6">
+          <div className="flex justify-center items-center">
+            <p className="text-slate-400 text-sm text-center">
               © {currentYear} TechNews. All rights reserved.
             </p>
-            <div className="flex items-center text-slate-400 text-sm">
-              <span>Made with</span>
-              <Heart className="w-4 h-4 text-red-500 mx-1 fill-current" />
-              <span>IEC</span>
-            </div>
           </div>
         </div>
       </div>

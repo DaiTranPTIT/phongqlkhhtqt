@@ -1,0 +1,170 @@
+"use client";
+
+import { Newspaper, Heart, Bookmark } from "lucide-react";
+import ArticleList from "@/components/ArticleList";
+import type { NewsArticle } from "@/types/news";
+import type {
+  SavedArticle,
+  FavoriteArticle,
+  NewsGridItem,
+} from "@/data/articles";
+
+interface ArticlesPageLayoutProps {
+  title: string;
+  description: string;
+  icon: "news" | "favorites" | "saved";
+  articles: (NewsArticle &
+    Partial<SavedArticle & FavoriteArticle & NewsGridItem>)[];
+  variant: "favorites" | "saved" | "news";
+  onSave?: (id: string) => void;
+  categoryParam?: string | null;
+}
+
+const getIconComponent = (icon: string) => {
+  const icons = {
+    news: Newspaper,
+    favorites: Heart,
+    saved: Bookmark,
+  };
+  return icons[icon as keyof typeof icons] || Newspaper;
+};
+
+const getGradientClasses = (variant: string) => {
+  const gradients = {
+    favorites: "from-slate-900 via-slate-800 to-pink-900",
+    saved: "from-slate-900 via-slate-800 to-blue-900",
+    news: "from-slate-900 via-slate-800 to-emerald-900",
+  };
+  return gradients[variant as keyof typeof gradients] || gradients.news;
+};
+
+const getAccentColor = (variant: string) => {
+  const colors = {
+    favorites: "text-pink-400",
+    saved: "text-blue-400",
+    news: "text-emerald-400",
+  };
+  return colors[variant as keyof typeof colors] || colors.news;
+};
+
+const getFilterColors = (variant: string) => {
+  const colors = {
+    favorites: "focus:ring-pink-500 focus:border-pink-500",
+    saved: "focus:ring-blue-500 focus:border-blue-500",
+    news: "focus:ring-emerald-500 focus:border-emerald-500",
+  };
+  return colors[variant as keyof typeof colors] || colors.news;
+};
+
+export default function ArticlesPageLayout({
+  title,
+  description,
+  icon,
+  articles,
+  variant,
+  onSave,
+  categoryParam,
+}: ArticlesPageLayoutProps) {
+  const IconComponent = getIconComponent(icon);
+  const gradientClasses = getGradientClasses(variant);
+  const accentColor = getAccentColor(variant);
+  const filterColors = getFilterColors(variant);
+
+  return (
+    <div className={`min-h-screen bg-gradient-to-br ${gradientClasses}`}>
+      <div className="container mx-auto px-4 py-8">
+        {/* Hero Header */}
+        <div className="text-center mb-12">
+          <div className="flex items-center justify-center mb-4">
+            <IconComponent className={`w-12 h-12 ${accentColor} mr-3`} />
+            <h1 className="text-4xl md:text-5xl font-bold text-white">
+              {title}
+            </h1>
+          </div>
+          <p className="text-slate-300 text-lg max-w-2xl mx-auto">
+            {description}
+          </p>
+        </div>
+
+        {/* Advanced Filters & Controls */}
+        <section className="mb-8">
+          <div className="bg-slate-800/50 backdrop-blur-sm rounded-lg border border-slate-700 max-w-3xl mx-auto p-3">
+            <h2 className="text-lg font-semibold text-white mb-3">
+              Bộ lọc nâng cao
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1">
+                  Danh mục
+                </label>
+                <select
+                  title="Filter by category"
+                  className={`w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white focus:ring-2 ${filterColors}`}
+                  value={categoryParam || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value) {
+                      window.location.href = `/news?category=${value}`;
+                    } else {
+                      window.location.href = "/news";
+                    }
+                  }}
+                >
+                  <option value="">Tất cả danh mục</option>
+                  <option value="ai">Trí tuệ nhân tạo</option>
+                  <option value="khcn">Hoạt động bộ KH&CN</option>
+                  <option value="telecom">Viễn thông và mạng</option>
+                  <option value="robotics">Robotic và tự động hóa</option>
+                  <option value="software">Phát triển phần mềm</option>
+                  <option value="security">An toàn thông tin</option>
+                  <option value="research">
+                    Thông tin hoạt động nghiên cứu khoa học
+                  </option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1">
+                  Sắp xếp theo
+                </label>
+                <select
+                  title="Sort articles"
+                  className={`w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white focus:ring-2 ${filterColors}`}
+                >
+                  <option>Mới nhất</option>
+                  <option>Phổ biến nhất</option>
+                  <option>Xem nhiều nhất</option>
+                  <option>Xu hướng</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-1">
+                  Khoảng thời gian
+                </label>
+                <select
+                  title="Select time range"
+                  className={`w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white focus:ring-2 ${filterColors}`}
+                >
+                  <option>Tất cả</option>
+                  <option>Hôm nay</option>
+                  <option>Tuần này</option>
+                  <option>Tháng này</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Article List */}
+        <ArticleList
+          articles={articles}
+          layout="list"
+          variant={variant}
+          enablePagination={true}
+          itemsPerPage={10}
+          showActions={true}
+          onSave={onSave}
+        />
+      </div>
+    </div>
+  );
+}

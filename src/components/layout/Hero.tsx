@@ -1,42 +1,139 @@
 "use client";
 
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { TrendingUp, Calendar, ExternalLink } from "lucide-react";
+import { getTrendingArticles } from "@/data/articles";
+import Link from "next/link";
+import Image from "next/image";
+import { formatDate } from "@/lib/utils";
 
 export default function Hero() {
-  return (
-    <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 py-20 px-4">
-      <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:50px_50px]" />
-      <div className="relative max-w-4xl mx-auto text-center">
-        <h1 className="text-5xl md:text-7xl font-bold mb-6 gradient-text">
-          TechNews
-        </h1>
-        <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-2xl mx-auto">
-          Stay ahead with the latest technology trends, innovations, and breaking news from the tech world.
-        </p>
-        
-        <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto mb-8">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
-            <Input 
-              placeholder="Search tech news..." 
-              className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-slate-400 focus:bg-white/20"
-            />
-          </div>
-          <Button className="bg-orange-500 hover:bg-orange-600 text-white px-6">
-            Search
-          </Button>
-        </div>
+  // Get trending articles for the hero section
+  const trendingArticles = getTrendingArticles().slice(0, 4);
+  const featuredArticle = trendingArticles[0]; // First article as featured
+  const secondaryArticles = trendingArticles.slice(1, 4); // Next 3 articles
 
-        <div className="flex flex-wrap justify-center gap-3 text-sm">
-          {["AI", "Blockchain", "Startups", "Mobile", "Web Dev", "Cybersecurity"].map((tag) => (
-            <span key={tag} className="px-3 py-1 glass rounded-full text-slate-200 hover:bg-white/20 cursor-pointer transition-all">
-              {tag}
-            </span>
-          ))}
+  return (
+    <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-6 pb-8 md:py-8">
+      {/* Main Hero Section */}
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
+          {/* Featured Article - Main Banner (2/3) */}
+          <div className="lg:col-span-2">
+            <div className="group relative overflow-hidden rounded-2xl h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] border border-slate-700 hover:border-slate-600 transition-all duration-300">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent z-10" />
+
+              <Image
+                src={
+                  featuredArticle.imageUrl ||
+                  `https://picsum.photos/1200/600?random=${featuredArticle.name.length}`
+                }
+                alt={featuredArticle.name}
+                fill
+                priority
+                className="object-cover group-hover:scale-105 transition-transform duration-700 ease-in-out"
+              />
+
+              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6 md:p-8 z-20">
+                {/* Category and Trending Badge */}
+                <div className="flex items-center gap-3 mb-2 md:mb-3">
+                  <span className="px-2 py-0.5 md:px-3 md:py-1 bg-green-500/90 text-white text-xs font-semibold rounded-full">
+                    {featuredArticle.field}
+                  </span>
+                  {featuredArticle.isHot && (
+                    <span className="flex items-center text-xs font-medium text-white/80 bg-orange-500/20 px-2 py-0.5 rounded-full">
+                      <TrendingUp className="w-3 h-3 md:w-3.5 md:h-3.5 mr-1 text-orange-400" />
+                      Xu hướng
+                    </span>
+                  )}
+                </div>
+
+                {/* Title */}
+                <Link
+                  href={`/news/${featuredArticle.id}`}
+                  className="block group"
+                >
+                  <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-2 md:mb-3 group-hover:text-green-400 transition-colors line-clamp-2">
+                    {featuredArticle.name}
+                  </h2>
+                </Link>
+
+                {/* Description */}
+                <p className="text-slate-300 mb-3 md:mb-4 max-w-3xl line-clamp-2 text-xs sm:text-sm md:text-base">
+                  {featuredArticle.des}
+                </p>
+
+                {/* Article Meta */}
+                <div className="flex flex-wrap items-center gap-x-4 md:gap-x-6 gap-y-1 md:gap-y-2 text-xs text-slate-400">
+                  <span className="flex items-center">
+                    <Calendar className="w-3 h-3 md:w-3.5 md:h-3.5 mr-1 md:mr-1.5" />
+                    {new Date().toLocaleDateString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <a
+                    href={featuredArticle.website || "#"}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-green-400 hover:opacity-80 transition-colors flex items-center gap-1"
+                  >
+                    {featuredArticle.supplier}
+                    <ExternalLink className="w-3 h-3 md:w-3.5 md:h-3.5" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Secondary Articles - Stacked Vertically (1/3) */}
+          <div className="lg:col-span-1 flex flex-col gap-4 md:gap-5">
+            {secondaryArticles.map((article) => (
+              <div
+                key={article.id}
+                className="group bg-slate-800/50 backdrop-blur-sm rounded-xl overflow-hidden border border-slate-700 hover:border-slate-600 transition-all duration-300 flex flex-row h-[110px] sm:h-[120px] md:h-[135px] lg:h-[140px]"
+              >
+                <div className="relative w-[120px] sm:w-[130px] md:w-[140px]">
+                  <Image
+                    src={
+                      article.imageUrl ||
+                      `https://picsum.photos/600/400?random=${article.name.length}`
+                    }
+                    alt={article.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+
+                <div className="flex-1 p-3 flex flex-col justify-between">
+                  <div>
+                    <div className="mb-1.5">
+                      <span className="px-1.5 py-0.5 bg-green-500/90 text-white text-[10px] md:text-xs font-medium rounded-full">
+                        {article.field}
+                      </span>
+                    </div>
+                    <Link href={`/news/${article.id}`} className="block">
+                      <h3 className="font-bold text-white text-sm md:text-base line-clamp-2 group-hover:text-green-400 transition-colors">
+                        {article.name}
+                      </h3>
+                    </Link>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1">
+                    <span className="flex items-center">
+                      <Calendar className="w-3 h-3 mr-0.5" />
+                      {new Date().toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                      })}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

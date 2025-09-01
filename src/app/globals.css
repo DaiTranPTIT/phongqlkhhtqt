@@ -54,6 +54,61 @@
     overflow: hidden;
   }
 
+  .article-popup-container {
+    position: fixed;
+    z-index: 99999; /* Tăng z-index lên cao hơn */
+    pointer-events: none; /* Cho phép tương tác với các phần tử phía sau */
+    width: 100%;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    overflow: visible;
+  }
+
+  .article-popup {
+    position: absolute;
+    background-color: rgb(30, 41, 59);
+    border-radius: 0.75rem;
+    border: 1px solid rgb(51, 65, 85);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3),
+      0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    max-width: 600px;
+    max-height: 300px;
+    overflow-y: auto;
+    pointer-events: auto; /* Cho phép tương tác với popup */
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+  }
+
+  /* Thanh cuộn trong popup */
+  .article-popup::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  .article-popup::-webkit-scrollbar-track {
+    background: rgba(30, 41, 59, 0.5);
+  }
+
+  .article-popup::-webkit-scrollbar-thumb {
+    background: rgba(100, 116, 139, 0.5);
+    border-radius: 4px;
+  }
+
+  .article-popup:after {
+    content: "";
+    position: absolute;
+    bottom: -8px; /* Mũi tên */
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 16px;
+    height: 16px;
+    background-color: rgb(30, 41, 59);
+    border-right: 1px solid rgb(51, 65, 85);
+    border-bottom: 1px solid rgb(51, 65, 85);
+  }
+
   /* Glass effect */
   .glass {
     @apply bg-white/10 backdrop-blur-md border border-white/20;
@@ -66,8 +121,11 @@
 
   /* Grid background */
   .bg-grid-white\/\[0\.02\] {
-    background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-image: linear-gradient(
+        rgba(255, 255, 255, 0.02) 1px,
+        transparent 1px
+      ),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
   }
 }
 

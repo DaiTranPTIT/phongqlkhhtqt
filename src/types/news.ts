@@ -9,6 +9,9 @@ export interface NewsArticle {
   website?: string;
   contact_info?: string;
   address?: string;
+  summarize?: string; // AI tóm tắt
+  internalLinks?: string[]; // Các liên kết nội bộ
+  externalLinks?: string[]; // Các liên kết ngoại bộ
 }
 
 // Interface cho trending với trạng thái trend

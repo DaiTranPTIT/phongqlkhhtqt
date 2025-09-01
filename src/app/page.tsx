@@ -1,26 +1,38 @@
 import Hero from "@/components/layout/Hero";
-import MainContent from "@/components/MainContent";
-import CategoryFilter from "@/components/CategoryFilter";
-import Favorites from "@/components/Favorites";
-import MySaved from "@/components/MySaved";
+import SavedPreview from "@/components/previews/SavedPreview";
+import NewsPreview from "@/components/previews/NewsPreview";
+import AISection from "@/components/categories/AISection";
+import KHCNSection from "@/components/categories/KHCNSection";
+import TelecomSection from "@/components/categories/TelecomSection";
+import RoboticsSection from "@/components/categories/RoboticsSection";
+import SoftwareSection from "@/components/categories/SoftwareSection";
+import SecuritySection from "@/components/categories/SecuritySection";
+import ResearchSection from "@/components/categories/ResearchSection";
 
 export default function Home() {
   return (
     <main className="min-h-screen">
       <Hero />
       <div className="container mx-auto px-4 py-8">
-        {/* Main 2/3 1/3 Layout */}
-        <MainContent />
-
-        {/* Favorites Section */}
+        {/* Latest News Section */}
         <div className="mt-12">
-          <Favorites />
+          <NewsPreview />
         </div>
+
+        {/* Category Sections */}
+        <AISection />
+        <KHCNSection />
+        <TelecomSection />
+        <RoboticsSection />
+        <SoftwareSection />
+        <SecuritySection />
+        <ResearchSection />
 
         {/* My Saved Articles Section */}
         <div className="mt-12">
-          <MySaved />
+          <SavedPreview />
         </div>
+        
       </div>
     </main>
   );

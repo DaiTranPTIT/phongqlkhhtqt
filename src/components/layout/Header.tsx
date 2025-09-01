@@ -4,11 +4,14 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Menu, X, Search, Bell, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import UserMenu from "@/components/auth/UserMenu";
+import { useAuth } from "@/lib/auth/AuthContext";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const categoryRef = useRef<HTMLDivElement>(null);
+  const { isAuthenticated } = useAuth();
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -28,24 +31,23 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "News", href: "/news" },
-    { name: "Trending", href: "/trending" },
-    { name: "Favorites", href: "/favorites" },
-    { name: "My Saved", href: "/saved" },
+    { name: "Trang chủ", href: "/" },
+    { name: "Tin tức", href: "/news" },
+    { name: "Đã lưu", href: "/saved", requireAuth: true },
   ];
 
   const categories = [
-    { name: "All", href: "/news" },
-    { name: "AI & Machine Learning", href: "/news?category=ai" },
-    { name: "Blockchain & Crypto", href: "/news?category=blockchain" },
-    { name: "Mobile Technology", href: "/news?category=mobile" },
-    { name: "Cybersecurity", href: "/news?category=cybersecurity" },
-    { name: "Cloud Computing", href: "/news?category=cloud" },
-    { name: "IoT & Smart Devices", href: "/news?category=iot" },
-    { name: "VR/AR", href: "/news?category=vr-ar" },
-    { name: "Startups", href: "/news?category=startups" },
-    { name: "Hardware", href: "/news?category=hardware" },
+    { name: "Tất cả", href: "/news" },
+    { name: "Trí tuệ nhân tạo", href: "/news?category=ai" },
+    { name: "Hoạt động bộ KH&CN", href: "/news?category=khcn" },
+    { name: "Viễn thông và mạng", href: "/news?category=telecom" },
+    { name: "Robotic và tự động hóa", href: "/news?category=robotics" },
+    { name: "Phát triển phần mềm", href: "/news?category=software" },
+    { name: "An toàn thông tin", href: "/news?category=security" },
+    {
+      name: "Thông tin hoạt động nghiên cứu khoa học",
+      href: "/news?category=research",
+    },
   ];
 
   return (
@@ -83,7 +85,7 @@ export default function Header() {
                 className="flex items-center gap-1 text-slate-300 hover:text-orange-400 transition-colors font-medium"
                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
               >
-                Categories
+                Danh mục
                 <ChevronDown
                   className={`w-4 h-4 transition-transform ${
                     isCategoryOpen ? "rotate-180" : ""
@@ -107,15 +109,17 @@ export default function Header() {
               )}
             </div>
 
-            {navLinks.slice(2).map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-slate-300 hover:text-orange-400 transition-colors font-medium"
-              >
-                {link.name}
-              </a>
-            ))}
+            {navLinks.slice(2).map((link) =>
+              !link.requireAuth || (link.requireAuth && isAuthenticated) ? (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-slate-300 hover:text-orange-400 transition-colors font-medium"
+                >
+                  {link.name}
+                </a>
+              ) : null
+            )}
           </div>
 
           {/* Right Side Actions */}
@@ -134,9 +138,11 @@ export default function Header() {
             >
               <Bell className="w-4 h-4" />
             </Button>
-            <Button className="hidden sm:flex bg-orange-500 hover:bg-orange-600 text-white">
-              Subscribe
-            </Button>
+
+            {/* User Menu */}
+            <div className="hidden sm:block">
+              <UserMenu />
+            </div>
 
             {/* Mobile Menu Button */}
             <Button
@@ -172,7 +178,7 @@ export default function Header() {
               {/* Mobile Categories */}
               <div className="border-t border-slate-700 pt-4">
                 <h3 className="text-slate-400 text-sm font-medium mb-2">
-                  Categories
+                  Danh mục
                 </h3>
                 <div className="space-y-2">
                   {categories.map((category) => (
@@ -188,21 +194,23 @@ export default function Header() {
                 </div>
               </div>
 
-              {navLinks.slice(2).map((link) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  className="text-slate-300 hover:text-orange-400 transition-colors font-medium"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.name}
-                </a>
-              ))}
+              {navLinks.slice(2).map((link) =>
+                !link.requireAuth || (link.requireAuth && isAuthenticated) ? (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    className="text-slate-300 hover:text-orange-400 transition-colors font-medium"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {link.name}
+                  </a>
+                ) : null
+              )}
 
               <div className="pt-4 border-t border-slate-800">
-                <Button className="w-full bg-orange-500 hover:bg-orange-600 text-white">
-                  Subscribe
-                </Button>
+                <div className="md:hidden">
+                  <UserMenu />
+                </div>
               </div>
             </div>
           </div>
