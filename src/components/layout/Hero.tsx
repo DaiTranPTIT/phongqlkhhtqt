@@ -72,7 +72,7 @@ export default function Hero() {
                       year: "numeric",
                     })}
                   </span>
-                  <a
+                  <Link
                     href={featuredArticle.website || "#"}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -80,7 +80,7 @@ export default function Hero() {
                   >
                     {featuredArticle.supplier}
                     <ExternalLink className="w-3 h-3 md:w-3.5 md:h-3.5" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

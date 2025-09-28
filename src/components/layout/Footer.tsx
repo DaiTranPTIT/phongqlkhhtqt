@@ -1,5 +1,5 @@
 import { Github, Twitter, Linkedin, Mail } from "lucide-react";
-
+import Link from "next/link";
 export default function Footer() {
   // Sử dụng giá trị cố định để tránh hydration mismatch
   const currentYear = 2025;
@@ -54,7 +54,7 @@ export default function Footer() {
               </h4>
               <div className="flex justify-center gap-4">
                 {socialLinks.map((social) => (
-                  <a
+                  <Link
                     key={social.label}
                     href={social.href}
                     className="flex items-center justify-center p-3 rounded-full bg-slate-800 hover:bg-orange-500 text-white transition-all transform hover:scale-110 hover:-translate-y-1 shadow-lg"
@@ -63,7 +63,7 @@ export default function Footer() {
                     rel="noopener noreferrer"
                   >
                     <social.icon className="w-5 h-5" />
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>

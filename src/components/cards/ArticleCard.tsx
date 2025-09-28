@@ -20,7 +20,7 @@ import type {
   FavoriteArticle,
   NewsGridItem,
 } from "@/data/articles";
-
+import Link from "next/link";
 interface ArticleCardProps {
   article: NewsArticle & Partial<SavedArticle & FavoriteArticle & NewsGridItem>;
   layout: "grid" | "list";
@@ -163,9 +163,9 @@ export default function ArticleCard({
                 <ul className="space-y-1">
                   {article.internalLinks.map((link, index) => (
                     <li key={index} className="text-sm">
-                      <a href={link} className="text-blue-400 hover:underline">
+                      <Link href={link} className="text-blue-400 hover:underline">
                         {link.split("/").pop()}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -181,14 +181,14 @@ export default function ArticleCard({
                 <ul className="space-y-1">
                   {article.externalLinks.map((link, index) => (
                     <li key={index} className="text-sm">
-                      <a
+                      <Link
                         href={link}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-green-400 hover:underline"
                       >
                         {new URL(link).hostname}
-                      </a>
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -260,7 +260,7 @@ export default function ArticleCard({
         </div>
 
         <div className="p-5">
-          <a
+          <Link
             href={article.website || "#"}
             target="_blank"
             rel="noopener noreferrer"
@@ -271,7 +271,7 @@ export default function ArticleCard({
             >
               {article.name}
             </h3>
-          </a>
+          </Link>
 
           <p className="text-slate-300 text-sm mb-4 line-clamp-3 leading-relaxed">
             {article.des}
@@ -305,7 +305,7 @@ export default function ArticleCard({
                   : "Recently"}
               </span>
             </div>
-            <a
+            <Link
               href={article.website || "#"}
               target="_blank"
               rel="noopener noreferrer"
@@ -313,7 +313,7 @@ export default function ArticleCard({
             >
               {article.supplier}
               <ExternalLink className="w-4 h-4" />
-            </a>
+            </Link>
           </div>
         </div>
       </article>
@@ -362,7 +362,7 @@ export default function ArticleCard({
         {/* Content */}
         <div className="flex-1 p-4">
           <div className="flex items-start justify-between gap-3 mb-2">
-            <a
+            <Link
               href={article.website || "#"}
               target="_blank"
               rel="noopener noreferrer"
@@ -373,7 +373,7 @@ export default function ArticleCard({
               >
                 {article.name}
               </h3>
-            </a>
+            </Link>
             <span
               className={`${colors.accent} font-medium text-xs ${colors.badge
                 .replace("bg-", "bg-")
@@ -415,7 +415,7 @@ export default function ArticleCard({
                   : "Recently"}
               </span>
             </div>
-            <a
+            <Link
               href={article.website || "#"}
               target="_blank"
               rel="noopener noreferrer"
@@ -423,7 +423,7 @@ export default function ArticleCard({
             >
               {article.supplier}
               <ExternalLink className="w-4 h-4" />
-            </a>
+            </Link>
           </div>
         </div>
       </div>

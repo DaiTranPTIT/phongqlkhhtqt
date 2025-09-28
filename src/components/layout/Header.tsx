@@ -70,13 +70,13 @@ export default function Header() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
             {navLinks.slice(0, 2).map((link) => (
-              <a
+              <Link
                 key={link.name}
                 href={link.href}
                 className="text-slate-300 hover:text-orange-400 transition-colors font-medium"
               >
                 {link.name}
-              </a>
+              </Link>
             ))}
 
             {/* Categories Dropdown */}
@@ -96,14 +96,14 @@ export default function Header() {
               {isCategoryOpen && (
                 <div className="absolute top-full left-0 mt-2 w-56 bg-slate-800 rounded-lg shadow-lg border border-slate-700 py-2 z-50">
                   {categories.map((category) => (
-                    <a
+                    <Link
                       key={category.name}
                       href={category.href}
                       className="block px-4 py-2 text-sm text-slate-300 hover:text-orange-400 hover:bg-slate-700 transition-colors"
                       onClick={() => setIsCategoryOpen(false)}
                     >
                       {category.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               )}
@@ -111,13 +111,13 @@ export default function Header() {
 
             {navLinks.slice(2).map((link) =>
               !link.requireAuth || (link.requireAuth && isAuthenticated) ? (
-                <a
+                <Link
                   key={link.name}
                   href={link.href}
                   className="text-slate-300 hover:text-orange-400 transition-colors font-medium"
                 >
                   {link.name}
-                </a>
+                </Link>
               ) : null
             )}
           </div>
@@ -165,14 +165,14 @@ export default function Header() {
           <div className="md:hidden border-t border-slate-800 py-4">
             <div className="flex flex-col space-y-4">
               {navLinks.slice(0, 2).map((link) => (
-                <a
+                <Link
                   key={link.name}
                   href={link.href}
                   className="text-slate-300 hover:text-orange-400 transition-colors font-medium"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
 
               {/* Mobile Categories */}
@@ -182,28 +182,28 @@ export default function Header() {
                 </h3>
                 <div className="space-y-2">
                   {categories.map((category) => (
-                    <a
+                    <Link
                       key={category.name}
                       href={category.href}
                       className="block text-sm text-slate-300 hover:text-orange-400 transition-colors pl-4"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {category.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </div>
 
               {navLinks.slice(2).map((link) =>
                 !link.requireAuth || (link.requireAuth && isAuthenticated) ? (
-                  <a
+                  <Link
                     key={link.name}
                     href={link.href}
                     className="text-slate-300 hover:text-orange-400 transition-colors font-medium"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 ) : null
               )}
 
