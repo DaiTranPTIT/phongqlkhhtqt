@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const { login, isLoading } = useAuth();
@@ -18,17 +18,17 @@ export default function LoginForm() {
     e.preventDefault();
     setError("");
 
-    if (!email || !password) {
+    if (!username || !password) {
       setError("Please fill in all fields");
       return;
     }
 
     try {
-      const success = await login(email, password);
+      const success = await login(username, password);
       if (success) {
         router.push("/");
       } else {
-        setError("Invalid email or password");
+        setError("Invalid username or password");
       }
     } catch (err) {
       console.error("Login error:", err);
@@ -53,15 +53,18 @@ export default function LoginForm() {
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-300 mb-1">
-            Email
+          <label
+            htmlFor="username"
+            className="block text-sm font-medium text-slate-300 mb-1"
+          >
+            Username
           </label>
           <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="your@email.com"
+            id="username"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="yourusername"
             className="w-full bg-slate-700 border-slate-600 text-white placeholder:text-slate-400"
             required
           />
@@ -69,7 +72,10 @@ export default function LoginForm() {
 
         <div>
           <div className="flex items-center justify-between mb-1">
-            <label htmlFor="password" className="block text-sm font-medium text-slate-300">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-slate-300"
+            >
               Password
             </label>
             <Link
@@ -102,7 +108,10 @@ export default function LoginForm() {
       <div className="mt-6 text-center">
         <p className="text-slate-400 text-sm">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/register" className="text-orange-400 hover:text-orange-300">
+          <Link
+            href="/auth/register"
+            className="text-orange-400 hover:text-orange-300"
+          >
             Sign up
           </Link>
         </p>

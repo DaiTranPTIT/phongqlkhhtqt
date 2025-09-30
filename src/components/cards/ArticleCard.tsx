@@ -389,9 +389,9 @@ export default function ArticleCard({
 
           {/* Tags */}
           <div className="flex flex-wrap gap-1 mb-3">
-            {article.tags?.slice(0, 3).map((tag: string) => (
+            {article.tags?.slice(0, 3).map((tag: string, index: number) => (
               <span
-                key={tag}
+                key={`${tag}-${index}`}
                 className="px-2 py-1 bg-slate-700/70 text-slate-300 text-xs rounded-md hover:bg-slate-600 transition-colors cursor-pointer"
               >
                 #{tag}

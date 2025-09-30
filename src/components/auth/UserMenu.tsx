@@ -41,12 +41,12 @@ export default function UserMenu() {
             variant="ghost"
             className="text-slate-300 hover:text-orange-400"
           >
-            Sign In
+            Đăng nhập
           </Button>
         </Link>
         <Link href="/auth/register">
           <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-            Sign Up
+            Đăng ký
           </Button>
         </Link>
       </div>

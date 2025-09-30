@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { Newspaper, Heart, Bookmark } from "lucide-react";
 import ArticleList from "@/components/ArticleList";
 import type { NewsArticle } from "@/types/news";
@@ -13,22 +14,12 @@ interface ArticlesPageLayoutProps {
   title: string;
   description: string;
   icon: "news" | "favorites" | "saved";
-  articles: (NewsArticle &
-    Partial<SavedArticle & FavoriteArticle & NewsGridItem>)[];
+  articles: (NewsArticle & Partial<SavedArticle & FavoriteArticle & NewsGridItem>)[];
   variant: "favorites" | "saved" | "news";
   onSave?: (id: string) => void;
   categoryParam?: string | null;
+  paginationControls?: React.ReactNode; // 👈 thêm
 }
-
-const getIconComponent = (icon: string) => {
-  const icons = {
-    news: Newspaper,
-    favorites: Heart,
-    saved: Bookmark,
-  };
-  return icons[icon as keyof typeof icons] || Newspaper;
-};
-
 const getGradientClasses = (variant: string) => {
   const gradients = {
     favorites: "from-slate-900 via-slate-800 to-pink-900",
@@ -46,7 +37,14 @@ const getAccentColor = (variant: string) => {
   };
   return colors[variant as keyof typeof colors] || colors.news;
 };
-
+const getIconComponent = (icon: string) => {
+  const icons = {
+    news: Newspaper,
+    favorites: Heart,
+    saved: Bookmark,
+  };
+  return icons[icon as keyof typeof icons] || Newspaper;
+};
 const getFilterColors = (variant: string) => {
   const colors = {
     favorites: "focus:ring-pink-500 focus:border-pink-500",
@@ -64,11 +62,22 @@ export default function ArticlesPageLayout({
   variant,
   onSave,
   categoryParam,
+  paginationControls
 }: ArticlesPageLayoutProps) {
+  const router = useRouter();
+
   const IconComponent = getIconComponent(icon);
   const gradientClasses = getGradientClasses(variant);
   const accentColor = getAccentColor(variant);
   const filterColors = getFilterColors(variant);
+
+  const handleCategoryChange = (value: string) => {
+    if (value) {
+      router.push(`/news?category=${value}`);
+    } else {
+      router.push("/news");
+    }
+  };
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${gradientClasses}`}>
@@ -101,14 +110,7 @@ export default function ArticlesPageLayout({
                   title="Filter by category"
                   className={`w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-md text-white focus:ring-2 ${filterColors}`}
                   value={categoryParam || ""}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    if (value) {
-                      window.location.href = `/news?category=${value}`;
-                    } else {
-                      window.location.href = "/news";
-                    }
-                  }}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
                 >
                   <option value="">Tất cả danh mục</option>
                   <option value="ai">Trí tuệ nhân tạo</option>
@@ -122,6 +124,7 @@ export default function ArticlesPageLayout({
                   </option>
                 </select>
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1">
                   Sắp xếp theo
@@ -136,6 +139,7 @@ export default function ArticlesPageLayout({
                   <option>Xu hướng</option>
                 </select>
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-1">
                   Khoảng thời gian
@@ -154,16 +158,17 @@ export default function ArticlesPageLayout({
           </div>
         </section>
 
-        {/* Article List */}
-        <ArticleList
+         <ArticleList
           articles={articles}
           layout="list"
           variant={variant}
-          enablePagination={true}
-          itemsPerPage={10}
           showActions={true}
           onSave={onSave}
         />
+
+        {paginationControls && (
+          <div className="mt-8 flex justify-center">{paginationControls}</div>
+        )}
       </div>
     </div>
   );
