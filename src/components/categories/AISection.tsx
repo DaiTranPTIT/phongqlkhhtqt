@@ -1,11 +1,15 @@
 "use client";
 
 import CategorySection from "@/components/categories/CategorySection";
-import { getArticlesByCategory } from "@/lib/categoryUtils";
 import { Brain } from "lucide-react";
+import { useArticlesByTag } from "@/lib/categoryUtils";
 
 export default function AISection() {
-  const articles = getArticlesByCategory("ai");
+  const { articles, loading } = useArticlesByTag("ai", 6);
+
+  if (loading) {
+    return <div className="text-slate-400">Đang tải dữ liệu...</div>;
+  }
 
   return (
     <CategorySection

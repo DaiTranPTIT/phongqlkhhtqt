@@ -1,12 +1,15 @@
 "use client";
 
 import CategorySection from "@/components/categories/CategorySection";
-import { getArticlesByCategory } from "@/lib/categoryUtils";
+import { useArticlesByTag } from "@/lib/categoryUtils";
 import { Code } from "lucide-react";
 
 export default function SoftwareSection() {
-  const articles = getArticlesByCategory("software");
-
+    const { articles, loading } = useArticlesByTag("software", 6);
+  
+    if (loading) {
+      return <div className="text-slate-400">Đang tải dữ liệu...</div>;
+    }
   return (
     <CategorySection
       title="Phát triển phần mềm"

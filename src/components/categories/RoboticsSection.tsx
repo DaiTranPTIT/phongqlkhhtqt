@@ -1,12 +1,15 @@
 "use client";
 
 import CategorySection from "@/components/categories/CategorySection";
-import { getArticlesByCategory } from "@/lib/categoryUtils";
+import { useArticlesByTag } from "@/lib/categoryUtils";
 import { Bot } from "lucide-react";
 
 export default function RoboticsSection() {
-  const articles = getArticlesByCategory("robotics");
+  const { articles, loading } = useArticlesByTag("robotics", 6);
 
+  if (loading) {
+    return <div className="text-slate-400">Đang tải dữ liệu...</div>;
+  }
   return (
     <CategorySection
       title="Robotic và tự động hóa"

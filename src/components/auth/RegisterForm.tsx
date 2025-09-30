@@ -51,7 +51,7 @@ export default function RegisterForm() {
   return (
     <div className="w-full max-w-md mx-auto p-6 bg-slate-800 rounded-xl shadow-xl">
       <div className="text-center mb-8">
-        <h1 className="text-2xl font-bold text-white mb-2">Create Account</h1>
+        <h1 className="text-2xl font-bold text-white mb-2">Tạo tài khoản</h1>
         <p className="text-slate-400 text-sm">
           Join TechNews to stay updated with the latest technology news
         </p>
@@ -66,7 +66,7 @@ export default function RegisterForm() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-1">
-            Full Name
+            Tên đầy đủ
           </label>
           <Input
             id="name"
@@ -96,7 +96,7 @@ export default function RegisterForm() {
 
         <div>
           <label htmlFor="password" className="block text-sm font-medium text-slate-300 mb-1">
-            Password
+            Mật khẩu
           </label>
           <Input
             id="password"
@@ -111,7 +111,7 @@ export default function RegisterForm() {
 
         <div>
           <label htmlFor="confirmPassword" className="block text-sm font-medium text-slate-300 mb-1">
-            Confirm Password
+            Nhập lại mật khẩu
           </label>
           <Input
             id="confirmPassword"
@@ -129,15 +129,15 @@ export default function RegisterForm() {
           className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2"
           disabled={isLoading}
         >
-          {isLoading ? "Creating Account..." : "Create Account"}
+          {isLoading ? "Đang Tạo tài khoản..." : "Tạo tài khoản"}
         </Button>
       </form>
 
       <div className="mt-6 text-center">
         <p className="text-slate-400 text-sm">
-          Already have an account?{" "}
+          Đã có tài khoản?{" "}
           <Link href="/auth/login" className="text-orange-400 hover:text-orange-300">
-            Sign in
+            Đăng nhập
           </Link>
         </p>
       </div>

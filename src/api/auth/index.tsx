@@ -16,11 +16,9 @@ export async function loginApi(username: string, password: string) {
         },
       }
     );
-    return res.data;
+    return res.data; // { access: "...", refresh: "..." }
   } catch (error: any) {
-    throw new Error(
-      error.response?.data?.detail || "Login failed"
-    );
+    throw new Error(error.response?.data?.detail || "Login failed");
   }
 }
 
@@ -41,8 +39,7 @@ export async function registerApi(
     );
     return res.data;
   } catch (error: any) {
-    throw new Error(
-      error.response?.data?.detail || "Register failed"
-    );
+    throw new Error(error.response?.data?.detail || "Register failed");
   }
 }
+

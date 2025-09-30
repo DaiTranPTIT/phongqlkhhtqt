@@ -15,6 +15,7 @@ export interface Article {
   internalLinks: string[];
   externalLinks: string[];
   image?: string;
+  publishedAt?: string;
 }
 
 export interface ApiResponse<T> {
@@ -77,6 +78,7 @@ export async function getPostByTag(
       internalLinks: item.internalLinks || [],
       externalLinks: item.externalLinks || [],
       imageUrl: item.images?.[0] || null,
+      publishedAt: item.time
     })),
   };
 

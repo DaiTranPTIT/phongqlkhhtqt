@@ -57,7 +57,7 @@ export default function LoginForm() {
             htmlFor="username"
             className="block text-sm font-medium text-slate-300 mb-1"
           >
-            Username
+            Tài khoản
           </label>
           <Input
             id="username"
@@ -76,13 +76,13 @@ export default function LoginForm() {
               htmlFor="password"
               className="block text-sm font-medium text-slate-300"
             >
-              Password
+              Mật khẩu
             </label>
             <Link
               href="/auth/forgot-password"
               className="text-xs text-orange-400 hover:text-orange-300"
             >
-              Forgot password?
+              Quên mật khẩu?
             </Link>
           </div>
           <Input
@@ -101,7 +101,7 @@ export default function LoginForm() {
           className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2"
           disabled={isLoading}
         >
-          {isLoading ? "Signing in..." : "Sign In"}
+          {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
         </Button>
       </form>
 
@@ -112,7 +112,7 @@ export default function LoginForm() {
             href="/auth/register"
             className="text-orange-400 hover:text-orange-300"
           >
-            Sign up
+            Đăng ký
           </Link>
         </p>
       </div>

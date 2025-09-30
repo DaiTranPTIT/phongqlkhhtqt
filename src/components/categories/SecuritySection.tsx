@@ -1,12 +1,15 @@
 "use client";
 
 import CategorySection from "@/components/categories/CategorySection";
-import { getArticlesByCategory } from "@/lib/categoryUtils";
+import { useArticlesByTag } from "@/lib/categoryUtils";
 import { Shield } from "lucide-react";
 
 export default function SecuritySection() {
-  const articles = getArticlesByCategory("security");
-
+    const { articles, loading } = useArticlesByTag("security", 6);
+  
+    if (loading) {
+      return <div className="text-slate-400">Đang tải dữ liệu...</div>;
+    }
   return (
     <CategorySection
       title="An toàn thông tin"

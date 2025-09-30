@@ -78,7 +78,7 @@ export default function UserMenu() {
             className="flex items-center gap-2 px-4 py-2 text-sm text-slate-300 hover:text-orange-400 hover:bg-slate-700"
           >
             <User className="w-4 h-4" />
-            My Profile
+            Tài khoản
           </Link>
 
           <Link
@@ -86,7 +86,7 @@ export default function UserMenu() {
             className="flex items-center gap-2 px-4 py-2 text-sm text-slate-300 hover:text-orange-400 hover:bg-slate-700"
           >
             <BookMarked className="w-4 h-4" />
-            Saved Articles
+            Các bài viết đã lưu
           </Link>
 
           <Link
@@ -94,7 +94,7 @@ export default function UserMenu() {
             className="flex items-center gap-2 px-4 py-2 text-sm text-slate-300 hover:text-orange-400 hover:bg-slate-700"
           >
             <Settings className="w-4 h-4" />
-            Settings
+            Cài đặt
           </Link>
 
           <button
@@ -102,7 +102,7 @@ export default function UserMenu() {
             className="flex items-center gap-2 px-4 py-2 text-sm text-red-400 hover:text-red-300 hover:bg-slate-700 w-full text-left"
           >
             <LogOut className="w-4 h-4" />
-            Sign Out
+            Đăng xuất
           </button>
         </div>
       )}

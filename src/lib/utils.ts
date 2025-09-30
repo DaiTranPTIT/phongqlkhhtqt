@@ -17,17 +17,34 @@ export function debounce<T extends (...args: never[]) => void>(
 }
 
 export function formatDate(dateString: string): string {
-  const date = new Date(dateString);
 
-  // Sử dụng format cố định để tránh hydration mismatch
-  const options: Intl.DateTimeFormatOptions = {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    timeZone: "UTC", // Đảm bảo consistency giữa server và client
-  };
+  const isoDate = new Date(dateString);
+  if (!isNaN(isoDate.getTime())) {
+    return isoDate.toLocaleDateString("vi-VN", {
+      day: "numeric",
+      month: "numeric",
+      year: "numeric",
+      timeZone: "Asia/Ho_Chi_Minh",
+    });
+  }
 
-  return date.toLocaleDateString("vi-VN", options);
+  const parts = dateString.split("·");
+  if (parts.length >= 2) {
+    const date = new Date(parts[1].trim());
+    if (!isNaN(date.getTime())) {
+      return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    }
+  }
+
+
+  const match = dateString.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (match) {
+    const [, day, month, year] = match;
+    return `${day}/${month}/${year}`;
+  }
+
+  // fallback
+  return dateString;
 }
 
 export function truncateText(text: string, maxLength: number): string {

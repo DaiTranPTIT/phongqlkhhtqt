@@ -1,36 +1,89 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import ArticleList from "@/components/ArticleList";
-import { getNewsGridItems } from "@/data/articles";
+import { getAllTags, Tag } from "@/api/tag";
+import { getPostByTag, Article } from "@/api/posts";
 
 export default function NewsPreview() {
   const router = useRouter();
-  const [articles, setArticles] = useState(getNewsGridItems());
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  const toggleLike = (id: string) => {
-    setArticles(
-      articles.map((article) =>
-        article.id === id
-          ? {
-              ...article,
-              isLiked: !article.isLiked,
-              likes: article.isLiked ? article.likes - 1 : article.likes + 1,
-            }
-          : article
-      )
-    );
-  };
+  useEffect(() => {
+    async function fetchArticles() {
+      try {
+        setLoading(true);
 
-  const toggleSave = (id: string) => {
-    setArticles(
-      articles.map((article) =>
-        article.id === id ? { ...article, isSaved: !article.isSaved } : article
-      )
-    );
-  };
+        const tagRes = await getAllTags();
+        setTags(tagRes.items);
+
+        const fixedTags = [
+          "ai",
+          "khcn",
+          "telecom",
+          "robotics",
+          "software",
+          "security",
+          "research",
+        ];
+
+        const targetTags = tagRes.items.filter((t) =>
+          fixedTags.includes(t.name.toLowerCase())
+        );
+
+  
+        const results = await Promise.all(
+          targetTags.map((t) => getPostByTag(t.id, 1, 3))
+        );
+
+
+        const merged = results.flatMap((r) => r.items);
+
+
+        merged.sort((a, b) => {
+          const dateA = new Date(a.publishedAt || 0).getTime();
+          const dateB = new Date(b.publishedAt || 0).getTime();
+          return dateB - dateA;
+        });
+
+
+        setArticles(merged.slice(0, 6));
+      } catch (err) {
+        console.error("Error loading preview articles:", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchArticles();
+  }, []);
+
+  // // Giữ nguyên logic like/save cũ
+  // const toggleLike = (id: string) => {
+  //   setArticles((prev) =>
+  //     prev.map((article) =>
+  //       article.id === id
+  //         ? {
+  //             ...article,
+  //             isLiked: !article.isLiked,
+  //             likes: article.isLiked ? article.likes - 1 : article.likes + 1,
+  //           }
+  //         : article
+  //     )
+  //   );
+  // };
+
+  // const toggleSave = (id: string) => {
+  //   setArticles((prev) =>
+  //     prev.map((article) =>
+  //       article.id === id ? { ...article, isSaved: !article.isSaved } : article
+  //     )
+  //   );
+  // };
 
   return (
     <section className="py-8">
@@ -52,8 +105,8 @@ export default function NewsPreview() {
         variant="news"
         limit={6}
         enablePagination={false}
-        onLike={toggleLike}
-        onSave={toggleSave}
+        // onLike={toggleLike}
+        // onSave={toggleSave}
         showActions={true}
       />
 

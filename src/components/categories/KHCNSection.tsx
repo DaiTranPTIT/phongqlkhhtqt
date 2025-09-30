@@ -1,12 +1,15 @@
 "use client";
 
 import CategorySection from "@/components/categories/CategorySection";
-import { getArticlesByCategory } from "@/lib/categoryUtils";
+import { useArticlesByTag } from "@/lib/categoryUtils";
 import { Building2 } from "lucide-react";
 
 export default function KHCNSection() {
-  const articles = getArticlesByCategory('khcn');
+  const { articles, loading } = useArticlesByTag("khcn", 6);
   
+  if (loading) {
+    return <div className="text-slate-400">Đang tải dữ liệu...</div>;
+  }
   return (
     <CategorySection 
       title="Hoạt động bộ KH&CN" 

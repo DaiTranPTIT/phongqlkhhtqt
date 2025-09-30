@@ -18,7 +18,7 @@ interface ArticlesPageLayoutProps {
   variant: "favorites" | "saved" | "news";
   onSave?: (id: string) => void;
   categoryParam?: string | null;
-  paginationControls?: React.ReactNode; // 👈 thêm
+  paginationControls?: React.ReactNode; 
 }
 const getGradientClasses = (variant: string) => {
   const gradients = {

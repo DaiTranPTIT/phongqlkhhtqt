@@ -24,51 +24,97 @@ export default function NewsPageClient() {
   );
 
   async function loadArticles(reset = false, customPage?: number) {
-    if (loading) return;
-    setLoading(true);
+  if (loading) return;
+  setLoading(true);
 
-    try {
-      const targetPage = customPage ?? (reset ? 1 : page);
+  try {
+    const targetPage = customPage ?? (reset ? 1 : page);
 
-      let data;
-      if (categoryParam) {
-        const tag = tags.find(
-          (t) => t.name.toLowerCase() === categoryParam.toLowerCase()
-        );
-        if (tag) {
-          data = await getPostByTag(tag.id, targetPage, 5);
-          if (reset) {
-            setCategoryTitle("Danh mục");
-            setCategoryDescription(`Bài viết mới nhất về ${tag.name}`);
-          }
-        } else {
-          data = { items: [] };
-          if (reset) {
-            setCategoryTitle("Không tìm thấy danh mục");
-            setCategoryDescription(
-              `Không có bài viết nào cho danh mục "${categoryParam}".`
-            );
-          }
+    let data: { items: Article[] };
+
+    if (categoryParam) {
+      // Nếu có categoryParam -> giữ nguyên
+      const tag = tags.find(
+        (t) => t.name.toLowerCase() === categoryParam.toLowerCase()
+      );
+      if (tag) {
+        data = await getPostByTag(tag.id, targetPage, 5);
+        if (reset) {
+          setCategoryTitle("Danh mục");
+          setCategoryDescription(`Bài viết mới nhất về ${tag.name}`);
         }
       } else {
-        data = await getAllPosts(targetPage, 5);
+        data = { items: [] };
         if (reset) {
-          setCategoryTitle("Tech News");
+          setCategoryTitle("Không tìm thấy danh mục");
           setCategoryDescription(
-            "Stay updated with the latest technology news, trends, and insights from around the world"
+            `Không có bài viết nào cho danh mục ${categoryParam}.`
           );
         }
       }
+    } else {
+      const fixedTags = [
+        "ai",
+        "khcn",
+        "telecom",
+        "robotics",
+        "software",
+        "security",
+        "research",
+      ];
 
-      setArticles(data.items);
-      setPage(targetPage);
-      setHasMore(data.items.length > 0);
+      const targetTags = tags.filter((t) =>
+        fixedTags.includes(t.name.toLowerCase())
+      );
+
+      const results = await Promise.all(
+        targetTags.map((t) => getPostByTag(t.id, targetPage, 5))
+      );
+
+      const merged = results.flatMap((r) => r.items);
+
+      // Sắp xếp theo ngày mới nhất (ưu tiên publishedAt, fallback createdAt)
+      merged.sort((a, b) => {
+        const dateA = new Date(a.publishedAt || 0).getTime();
+        const dateB = new Date(b.publishedAt || 0).getTime();
+        return dateB - dateA; // mới nhất lên đầu
+      });
+
+
+      data = { items: merged };
+      if (reset) {
+        setCategoryTitle("Tin tức công nghệ");
+        setCategoryDescription(
+          "Tổng hợp bài viết từ nhiều chủ đề công nghệ quan trọng"
+        );
+      }
+    }
+    setArticles(data.items);
+    setPage(targetPage);
+    setHasMore(data.items.length > 0);
+  } catch (err) {
+    console.error("Error loading posts:", err);
+  } finally {
+    setLoading(false);
+  }
+}
+  useEffect(() => {
+  async function fetchTags() {
+    try {
+      const tagRes = await getAllTags();
+      setTags(tagRes.items);
     } catch (err) {
-      console.error("Error loading posts:", err);
-    } finally {
-      setLoading(false);
+      console.error("Error loading tags:", err);
     }
   }
+  fetchTags();
+}, []);
+
+useEffect(() => {
+  if (tags.length > 0) {
+    loadArticles(true, 1);
+  }
+}, [tags, categoryParam]);
 
   
   useEffect(() => {

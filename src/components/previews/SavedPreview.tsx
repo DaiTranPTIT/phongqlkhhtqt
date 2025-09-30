@@ -6,16 +6,33 @@ import { Button } from "@/components/ui/button";
 import ArticleList from "@/components/ArticleList";
 import { getSavedArticles } from "@/data/articles";
 import { useAuth } from "@/lib/auth/AuthContext";
+import { getUserInfoApi } from "@/api/user";
+import { useEffect } from "react";
 
 export default function SavedPreview() {
   const router = useRouter();
   const articles = getSavedArticles();
   const { isAuthenticated } = useAuth();
 
-  // Không hiển thị nếu chưa đăng nhập
   if (!isAuthenticated) {
     return null;
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem("techNewsToken");
+    if (!token) return; // nếu null thì dừng
+
+    async function fetchAndLogUserInfo() {
+      try {
+        const userInfo = await getUserInfoApi(token!); // token là string ở đây
+        console.log("User Info:", userInfo);
+      } catch (error: any) {
+        console.error("Error fetching user info:", error.message);
+      }
+    }
+
+    fetchAndLogUserInfo();
+  }, []);
 
   return (
     <section className="py-8">
