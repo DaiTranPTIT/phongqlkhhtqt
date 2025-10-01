@@ -2,12 +2,22 @@ import axios from "axios";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+export interface UserTag {
+  id: string;
+  user_info: string;
+  tag: string;
+}
 
-export async function getUserInfoApi(token: string) {
+export interface UserInfoResponse {
+  message: string;
+  status: string;
+  data: UserTag[];
+}
+export async function getUserInfoApi(token: string): Promise<UserInfoResponse> {
   if (!token) throw new Error("No token provided");
 
   try {
-    const res = await axios.get(`${API_URL}/api/user_info_posts/`, {
+    const res = await axios.get<UserInfoResponse>(`${API_URL}/api/user-info-tags/`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;

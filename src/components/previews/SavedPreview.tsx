@@ -4,34 +4,61 @@ import { Bookmark, ExternalLink } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import ArticleList from "@/components/ArticleList";
-import { getSavedArticles } from "@/data/articles";
 import { useAuth } from "@/lib/auth/AuthContext";
 import { getUserInfoApi } from "@/api/user";
-import { useEffect } from "react";
+import { getPostByTag, Article } from "@/api/posts";
+import { useEffect, useState } from "react";
 
 export default function SavedPreview() {
   const router = useRouter();
-  const articles = getSavedArticles();
   const { isAuthenticated } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [articles, setArticles] = useState<Article[]>([]);
 
-  if (!isAuthenticated) {
-    return null;
+  async function fetchArticlesByTags(tagIds: string[]) {
+    try {
+      setLoading(true);
+
+
+      const results = await Promise.all(
+        tagIds.map((tagId) => getPostByTag(tagId, 1, 3))
+      );
+
+
+      const allArticles: Article[] = results.flatMap((res) => res.items);
+
+      allArticles.sort((a, b) => {
+        const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+        const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+        return dateB - dateA;
+      });
+
+      setArticles(allArticles.slice(0, 6));
+    } catch (err) {
+      console.error("Error loading preview articles:", err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   useEffect(() => {
     const token = localStorage.getItem("techNewsToken");
-    if (!token) return; // nếu null thì dừng
+    if (!token) return;
 
-    async function fetchAndLogUserInfo() {
+    async function fetchAndLoad() {
       try {
-        const userInfo = await getUserInfoApi(token!); // token là string ở đây
-        console.log("User Info:", userInfo);
+        const userInfo = await getUserInfoApi(token!);
+        const tagIds: string[] = userInfo.data.map((item: any) => item.tag);
+
+        if (tagIds.length > 0) {
+          await fetchArticlesByTags(tagIds);
+        }
       } catch (error: any) {
         console.error("Error fetching user info:", error.message);
       }
     }
 
-    fetchAndLogUserInfo();
+    fetchAndLoad();
   }, []);
 
   return (

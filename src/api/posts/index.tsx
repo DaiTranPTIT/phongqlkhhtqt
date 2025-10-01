@@ -14,7 +14,7 @@ export interface Article {
   summarize: string;
   internalLinks: string[];
   externalLinks: string[];
-  image?: string;
+  imageUrl?: string;
   publishedAt?: string;
 }
 
@@ -60,6 +60,34 @@ export async function getPostByTag(
   limit = 3
 ): Promise<ApiResponse<Article>> {
   const url = `${API_URL}/api/posts/by_tag/${tag_id}?page=${page}&limit=${limit}`;
+
+  const res = await axios.get<ApiResponse<any>>(url);
+
+  const normalized: ApiResponse<Article> = {
+    ...res.data,
+    items: res.data.items.map((item) => ({
+      name: item.title,
+      field: item.topic?.[0] || "Chưa phân loại",
+      des: item.description || "",
+      tags: item.topic || [],
+      supplier: item.domain || "Unknown",
+      website: item.url,
+      contact_info: item.contact_info || "contact@unknown.com",
+      address: item.address || "Unknown",
+      summarize: item.summary || "",
+      internalLinks: item.internalLinks || [],
+      externalLinks: item.externalLinks || [],
+      imageUrl: item.images?.[0] || null,
+      publishedAt: item.time
+    })),
+  };
+
+  return normalized;
+}
+export async function getPostById(
+  tag_id?: string,
+): Promise<ApiResponse<Article>> {
+  const url = `${API_URL}/api/posts/by_tag/${tag_id}`;
 
   const res = await axios.get<ApiResponse<any>>(url);
 
