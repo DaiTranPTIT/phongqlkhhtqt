@@ -201,10 +201,11 @@ export default function Hero() {
                   <div className="flex items-center justify-between text-[10px] text-slate-400 mt-1">
                     <span className="flex items-center">
                       <Calendar className="w-3 h-3 mr-0.5" />
-                      {new Date(article.publishedAt || "").toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })}
+                      {(() => {
+
+                        return formatDate(article.publishedAt ?? "");
+                        
+                      })()}
                     </span>
                   </div>
                 </div>
