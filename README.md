@@ -8,7 +8,7 @@ A modern, responsive news aggregation platform built with Next.js 15, specifical
 - Config API domain 
 
 ```bash
-NEXT_PUBLIC_API_URL=http://localhost:3456
+NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
 
 ```bash
